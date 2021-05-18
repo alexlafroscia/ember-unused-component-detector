@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "@movable/eslint-config",
+    "@movable/eslint-config-node",
+    "@movable/eslint-config-typescript"
+  ],
+  "rules": {
+    "node/no-missing-import": "off",
+    "node/no-unsupported-features/es-syntax": ["error", { "ignores": ["modules"] }]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts"],
+      "rules": {
+        "node/no-unpublished-import": "off"
+      }
+    }
+  ]
+}
