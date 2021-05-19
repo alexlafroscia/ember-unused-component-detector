@@ -34,6 +34,9 @@
   "lint-staged": {
     "*.{js,ts}": "eslint --fix"
   },
+  "engines": {
+    "node": "14.15.5"
+  },
   "volta": {
     "node": "14.15.5",
     "yarn": "1.22.10"

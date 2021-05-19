@@ -1,34 +1,47 @@
-import { parse } from 'path';
+import { parse, sep as osPathSeperator } from 'path';
 
 export class ComponentName {
-  private path: string;
+  private shortName: string;
 
-  constructor(path: string) {
-    this.path = path;
+  static pathIsComponent(path: string): boolean {
+    return path.includes('app/components') || path.includes('app/templates/components');
   }
 
-  private get pathWithoutComponentsFolder(): string {
-    return this.path.replace('app/components/', '');
+  constructor(componentPath: string) {
+    const parsedPath = parse(componentPath);
+
+    // Create an array of strings that represents the path to the file, starting with the file's parent directory and
+    // working upward to the root
+    let pathParts = parsedPath.dir.split(osPathSeperator).reverse();
+
+    // Include the file name, if it is not `index`
+    if (parsedPath.name !== 'index') {
+      pathParts.unshift(parsedPath.name);
+    }
+
+    // Strip any path parts after (and including) `app`
+    const appIndex = pathParts.indexOf('app');
+    pathParts = pathParts.slice(0, appIndex);
+
+    // Remove `templates` directory
+    if (pathParts[pathParts.length - 1] === 'templates') {
+      pathParts.pop();
+    }
+
+    // Remove `components` directory
+    if (pathParts[pathParts.length - 1] === 'components') {
+      pathParts.pop();
+    }
+
+    // Put the component name back together
+    this.shortName = pathParts.reverse().join('/');
   }
 
   /**
    * The "Classic", kebab-style invocation pattern for a component
    */
   get classicStyle(): string {
-    const parsedPath = parse(this.pathWithoutComponentsFolder);
-
-    // Name the component being the `index` component
-    if (parsedPath.name === 'index') {
-      return parsedPath.dir;
-    }
-
-    // Handle components that live in the top-level `components` directory
-    if (!parsedPath.dir) {
-      return parsedPath.name;
-    }
-
-    // Otherwise, assume we need the directory and file names together
-    return `${parsedPath.dir}/${parsedPath.name}`;
+    return this.shortName;
   }
 
   /**

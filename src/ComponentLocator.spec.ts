@@ -18,13 +18,13 @@ describe('locating modern components', () => {
       `,
     });
 
-    const fooLocator = new ComponentLocator(new ComponentName('foo'));
-    const fooBarLocator = new ComponentLocator(new ComponentName('foo/bar'));
-    const unknownLocator = new ComponentLocator(new ComponentName('unknown'));
+    const fooLocator = new ComponentLocator(new ComponentName('app/components/foo.js'));
+    const fooBarLocator = new ComponentLocator(new ComponentName('app/components/foo/bar.js'));
+    const unusedLocator = new ComponentLocator(new ComponentName('app/components/unused.js'));
 
     expect(await fooLocator.hasModernComponentInvocations(tmp.dir)).toBe(true);
     expect(await fooBarLocator.hasModernComponentInvocations(tmp.dir)).toBe(true);
-    expect(await unknownLocator.hasModernComponentInvocations(tmp.dir)).toBe(false);
+    expect(await unusedLocator.hasModernComponentInvocations(tmp.dir)).toBe(false);
   });
 
   test('false positive with parent component', async () => {
@@ -38,8 +38,8 @@ describe('locating modern components', () => {
       `,
     });
 
-    const fooLocator = new ComponentLocator(new ComponentName('foo'));
-    const fooBarLocator = new ComponentLocator(new ComponentName('foo/bar'));
+    const fooLocator = new ComponentLocator(new ComponentName('app/components/foo.js'));
+    const fooBarLocator = new ComponentLocator(new ComponentName('app/components/foo/bar'));
 
     expect(await fooLocator.hasModernComponentInvocations(oneLineTmpDir.dir)).toBe(false);
     expect(await fooBarLocator.hasModernComponentInvocations(oneLineTmpDir.dir)).toBe(true);
@@ -57,9 +57,9 @@ describe('locating classic components', () => {
       'index.hbs': `{{component 'foo/bar'}}`,
     });
 
-    const fooLocator = new ComponentLocator(new ComponentName('foo'));
-    const fooBarLocator = new ComponentLocator(new ComponentName('foo/bar'));
-    const unknownLocator = new ComponentLocator(new ComponentName('unknown'));
+    const fooLocator = new ComponentLocator(new ComponentName('app/components/foo.js'));
+    const fooBarLocator = new ComponentLocator(new ComponentName('app/components/foo/bar.js'));
+    const unknownLocator = new ComponentLocator(new ComponentName('app/components/unknown.js'));
 
     expect(await fooLocator.hasComponentHelperInvocations(fooTmp.dir)).toBe(true);
     expect(await fooLocator.hasComponentHelperInvocations(fooBarTmp.dir)).toBe(false);
