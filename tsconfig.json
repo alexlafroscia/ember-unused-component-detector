@@ -1,3 +1,13 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json"
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    // Don't transpile away ESM
+    "module": "es2020",
+
+    // Leverage Node packages
+    "moduleResolution": "node",
+
+    "outDir": "dist"
+  },
+  "exclude": ["src/*.spec.ts"]
 }

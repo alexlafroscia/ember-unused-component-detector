@@ -4,7 +4,14 @@
   "description": "Locate Ember components that are not actually used in your application",
   "author": "Alex LaFroscia <alex@lafroscia.com>",
   "license": "MIT",
+  "type": "module",
+  "bin": "bin/index.js",
+  "files": [
+    "bin/index.js",
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
     "lint": "eslint --ext .js,.ts .",
     "test": "jest",
     "postinstall": "husky install",

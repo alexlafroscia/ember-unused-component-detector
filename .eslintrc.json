@@ -4,11 +4,19 @@
     "@movable/eslint-config-node",
     "@movable/eslint-config-typescript"
   ],
-  "rules": {
-    "node/no-missing-import": "off",
-    "node/no-unsupported-features/es-syntax": ["error", { "ignores": ["modules"] }]
+  "settings": {
+    "node": {
+      "tryExtensions": [".js", ".ts"]
+    }
   },
   "overrides": [
+    {
+      "files": ["src/*.ts"],
+      "rules": {
+        // TypeScript handles this for us
+        "node/no-missing-import": "off"
+      }
+    },
     {
       "files": ["**/*.spec.ts"],
       "rules": {
