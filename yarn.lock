@@ -836,6 +836,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/debug@npm:^4.1.5":
+  version: 4.1.5
+  resolution: "@types/debug@npm:4.1.5"
+  checksum: 416ad24bc589be0fb8c78bea972aa7d4ffdf6b136239701b1792674463b2dbf8c6707f6055ec484f79ec1f2b528ffef90c87e55df7e4a0f458184cad5bf0cfc8
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.2":
   version: 4.1.4
   resolution: "@types/graceful-fs@npm:4.1.4"
@@ -2102,7 +2109,10 @@ __metadata:
     "@movable/eslint-config-typescript": ^1.0.0
     "@movable/prettier-config": ^1.0.0
     "@tsconfig/node14": ^1.0.0
+    "@types/debug": ^4.1.5
     "@types/jest": ^26.0.20
+    chalk: ^4.1.1
+    debug: ^4.3.1
     eslint: ^7.26.0
     file-fixture-factory: ^1.0.1
     husky: ^6.0.0

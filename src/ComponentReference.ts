@@ -1,10 +1,12 @@
 import { parse, sep as osPathSeperator } from 'path';
 
-export class ComponentName {
+const COMPONENT_PATH_REGEX = /app\/(templates\/)?components/;
+
+export class ComponentReference {
   private shortName: string;
 
   static pathIsComponent(path: string): boolean {
-    return path.includes('app/components') || path.includes('app/templates/components');
+    return COMPONENT_PATH_REGEX.test(path);
   }
 
   constructor(componentPath: string) {
@@ -50,11 +52,16 @@ export class ComponentName {
   get modernStyle(): string {
     return this.classicStyle
       .split('/')
-      .map((part) => {
-        const [first, ...rest] = part.split('');
+      .map((part) =>
+        part
+          .split('-')
+          .map((segment) => {
+            const [first, ...rest] = segment.split('');
 
-        return first.toUpperCase() + rest.join('');
-      })
+            return first.toUpperCase() + rest.join('');
+          })
+          .join('')
+      )
       .join('::');
   }
 }

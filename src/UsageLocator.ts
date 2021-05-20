@@ -1,5 +1,8 @@
-import { ComponentName } from './ComponentName';
+import { ComponentReference } from './ComponentReference';
 import { ripGrep as rg } from 'ripgrep-js';
+import debug from 'debug';
+
+const log = debug('eucd:usage-locator');
 
 /**
  * Rust-style Regex pattern to match either a space
@@ -30,15 +33,16 @@ const SPACE_OR_END_OF_LINE_MATCH = '(\\s|\\z)';
  */
 const EITHER_QUOTE_MATCH = `('|\\")`;
 
-export class ComponentLocator {
-  private name: ComponentName;
+export class UsageLocator {
+  private name: ComponentReference;
 
-  constructor(name: ComponentName) {
+  constructor(name: ComponentReference) {
     this.name = name;
   }
 
   async hasModernComponentInvocations(packageRoot: string): Promise<boolean> {
     const regex = `"<${this.name.modernStyle}${SPACE_OR_END_OF_LINE_MATCH}"`;
+    log('Searching for %s', regex);
     const matches = await rg(packageRoot, { regex });
 
     return matches.length > 0;
@@ -46,6 +50,7 @@ export class ComponentLocator {
 
   async hasClassicComponentInvocation(packageRoot: string): Promise<boolean> {
     const regex = `"\\{\\{${this.name.classicStyle}(${SPACE_OR_END_OF_LINE_MATCH}|}})"`;
+    log('Searching for %s', regex);
     const matches = await rg(packageRoot, { regex });
 
     return matches.length > 0;
@@ -53,6 +58,7 @@ export class ComponentLocator {
 
   async hasComponentHelperInvocations(packageRoot: string): Promise<boolean> {
     const regex = `"\\{\\{component ${EITHER_QUOTE_MATCH}${this.name.classicStyle}${EITHER_QUOTE_MATCH}(${SPACE_OR_END_OF_LINE_MATCH}|}})"`;
+    log('Searching for %s', regex);
     const matches = await rg(packageRoot, { regex });
 
     return matches.length > 0;

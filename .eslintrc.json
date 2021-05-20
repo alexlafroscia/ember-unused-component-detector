@@ -14,7 +14,9 @@
       "files": ["src/*.ts"],
       "rules": {
         // TypeScript handles this for us
-        "node/no-missing-import": "off"
+        "@typescript-eslint/no-unused-vars": "off",
+        "node/no-missing-import": "off",
+        "node/no-unsupported-features/es-syntax": "off"
       }
     },
     {
