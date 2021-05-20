@@ -56,6 +56,9 @@ describe('locating classic components', () => {
     const fooBarTmp = await factory.createStructure({
       'index.hbs': `{{component 'foo/bar'}}`,
     });
+    const asSubExppression = await factory.createStructure({
+      'index.hbs': `(component 'foo/bar')`,
+    });
 
     const fooLocator = new UsageLocator(new ComponentReference('app/components/foo.js'));
     const fooBarLocator = new UsageLocator(new ComponentReference('app/components/foo/bar.js'));
@@ -66,6 +69,7 @@ describe('locating classic components', () => {
 
     expect(await fooBarLocator.hasComponentHelperInvocations(fooTmp.dir)).toBe(false);
     expect(await fooBarLocator.hasComponentHelperInvocations(fooBarTmp.dir)).toBe(true);
+    expect(await fooBarLocator.hasComponentHelperInvocations(asSubExppression.dir)).toBe(true);
 
     expect(await unknownLocator.hasComponentHelperInvocations(fooTmp.dir)).toBe(false);
     expect(await unknownLocator.hasComponentHelperInvocations(fooBarTmp.dir)).toBe(false);
