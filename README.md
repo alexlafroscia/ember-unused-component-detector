@@ -1,5 +1,7 @@
 # Ember Unused Component Detector
 
+[![CI](https://github.com/alexlafroscia/ember-unused-component-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/alexlafroscia/ember-unused-component-detector/actions/workflows/ci.yml)
+
 > A little script for finding unused components in your Ember application
 
 In a large, long-standing codebase, it can be hard to keep track of whether all components are actually used. It's easy to stop using a component and forget to remove it, and because Ember does not do tree-shaking yet, those components will end up in your build output regardless of whether they're used or not.
