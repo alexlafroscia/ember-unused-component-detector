@@ -1,8 +1,10 @@
 import { ComponentReference } from './ComponentReference';
-import { ripGrep as rg } from 'ripgrep-js';
+import { ripGrep as rg, Options as BaseRipGrepOptions } from 'ripgrep-js';
 import debug from 'debug';
 
 const log = debug('eucd:usage-locator');
+
+type RipGrepOptions = Omit<BaseRipGrepOptions, 'string' | 'regex'>;
 
 /**
  * Rust-style Regex pattern to match either a space
@@ -26,6 +28,25 @@ const log = debug('eucd:usage-locator');
 const SPACE_OR_END_OF_LINE_MATCH = '(\\s|\\z)';
 
 /**
+ * Rust-style Regex pattern to match either a space
+ *
+ * ```
+ * {{component 'foo'}}
+ *            ^
+ * ```
+ *
+ * or a new-line followed by some amount of whitespace
+ *
+ * ```
+ * {{component
+ *   'foo'}}
+ * ^
+ * ```
+ *
+ */
+const SPACE_OR_NEWLINE_WITH_WHITESPACE = '(\\s|\\n(\\s*))';
+
+/**
  * Rust-style Regex pattern to match either a single _or_ a double quote
  *
  * Escapes the double-quote, as the entire regex string this is embedded within is itself wrapped in double quotes,
@@ -33,10 +54,15 @@ const SPACE_OR_END_OF_LINE_MATCH = '(\\s|\\z)';
  */
 const EITHER_QUOTE_MATCH = `('|\\")`;
 
-function performSearch(path: string, regex: string): ReturnType<typeof rg> {
+function performSearch(
+  path: string,
+  regex: string,
+  options: RipGrepOptions = {}
+): ReturnType<typeof rg> {
   return rg(path, {
     globs: ['app/**/*'],
     regex,
+    ...options,
   });
 }
 
@@ -64,9 +90,9 @@ export class UsageLocator {
   }
 
   async hasComponentHelperInvocations(packageRoot: string): Promise<boolean> {
-    const regex = `"component ${EITHER_QUOTE_MATCH}${this.name.classicStyle}${EITHER_QUOTE_MATCH}"`;
+    const regex = `"component${SPACE_OR_NEWLINE_WITH_WHITESPACE}${EITHER_QUOTE_MATCH}${this.name.classicStyle}${EITHER_QUOTE_MATCH}"`;
     log('Searching for %s', regex);
-    const matches = await performSearch(packageRoot, regex);
+    const matches = await performSearch(packageRoot, regex, { multiline: true });
 
     return matches.length > 0;
   }
