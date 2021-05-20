@@ -33,6 +33,13 @@ const SPACE_OR_END_OF_LINE_MATCH = '(\\s|\\z)';
  */
 const EITHER_QUOTE_MATCH = `('|\\")`;
 
+function performSearch(path: string, regex: string): ReturnType<typeof rg> {
+  return rg(path, {
+    globs: ['app/**/*'],
+    regex,
+  });
+}
+
 export class UsageLocator {
   private name: ComponentReference;
 
@@ -43,7 +50,7 @@ export class UsageLocator {
   async hasModernComponentInvocations(packageRoot: string): Promise<boolean> {
     const regex = `"<${this.name.modernStyle}${SPACE_OR_END_OF_LINE_MATCH}"`;
     log('Searching for %s', regex);
-    const matches = await rg(packageRoot, { regex });
+    const matches = await performSearch(packageRoot, regex);
 
     return matches.length > 0;
   }
@@ -51,7 +58,7 @@ export class UsageLocator {
   async hasClassicComponentInvocation(packageRoot: string): Promise<boolean> {
     const regex = `"\\{\\{${this.name.classicStyle}(${SPACE_OR_END_OF_LINE_MATCH}|}})"`;
     log('Searching for %s', regex);
-    const matches = await rg(packageRoot, { regex });
+    const matches = await performSearch(packageRoot, regex);
 
     return matches.length > 0;
   }
@@ -59,7 +66,7 @@ export class UsageLocator {
   async hasComponentHelperInvocations(packageRoot: string): Promise<boolean> {
     const regex = `"component ${EITHER_QUOTE_MATCH}${this.name.classicStyle}${EITHER_QUOTE_MATCH}"`;
     log('Searching for %s', regex);
-    const matches = await rg(packageRoot, { regex });
+    const matches = await performSearch(packageRoot, regex);
 
     return matches.length > 0;
   }

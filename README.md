@@ -18,6 +18,7 @@ Each found component will be reported in the first found style, and a warning pr
 - Dynamic component names provided to the `component` helper cannot be found
 - Components are not removed; just reported on. Please double-check your app yourself before removing anything!
 - The contents of files in the `app/components` and `app/templates/components` directories are not verified; if the file exists _at all_ it is assumed it is a component!
+- Only the `app` directory of is searched, so avoid false-positives form your tests; if the test is the only place it's used, it should be removed!
 
 ## System Requirements
 

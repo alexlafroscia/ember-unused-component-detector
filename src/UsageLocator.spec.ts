@@ -9,13 +9,24 @@ afterAll(async function () {
   await factory.disposeAll();
 });
 
+test('it only looks in the `app` directory', async () => {
+  const tmpDir = await factory.createStructure({
+    'index.hbs': '<Foo />',
+  });
+  const fooLocator = new UsageLocator(new ComponentReference('app/components/foo.js'));
+
+  expect(await fooLocator.hasModernComponentInvocations(tmpDir.dir)).toBe(false);
+});
+
 describe('locating modern components', () => {
   test('it can find a modern component invocation', async () => {
     const tmp = await factory.createStructure({
-      'index.hbs': `
-        <Foo />
-        <Foo::Bar />
-      `,
+      app: {
+        'index.hbs': `
+          <Foo />
+          <Foo::Bar />
+        `,
+      },
     });
 
     const fooLocator = new UsageLocator(new ComponentReference('app/components/foo.js'));
@@ -29,13 +40,17 @@ describe('locating modern components', () => {
 
   test('false positive with parent component', async () => {
     const oneLineTmpDir = await factory.createStructure({
-      'index.hbs': '<Foo::Bar />',
+      app: {
+        'index.hbs': '<Foo::Bar />',
+      },
     });
     const multiLineTmpDir = await factory.createStructure({
-      'index.hs': `
-        <Foo::Bar
-        />
-      `,
+      app: {
+        'index.hs': `
+          <Foo::Bar
+          />
+        `,
+      },
     });
 
     const fooLocator = new UsageLocator(new ComponentReference('app/components/foo.js'));
@@ -51,13 +66,19 @@ describe('locating modern components', () => {
 describe('locating classic components', () => {
   test('it can find usage of the `component` helper', async () => {
     const fooTmp = await factory.createStructure({
-      'index.hbs': `{{component 'foo'}}`,
+      app: {
+        'index.hbs': `{{component 'foo'}}`,
+      },
     });
     const fooBarTmp = await factory.createStructure({
-      'index.hbs': `{{component 'foo/bar'}}`,
+      app: {
+        'index.hbs': `{{component 'foo/bar'}}`,
+      },
     });
     const asSubExppression = await factory.createStructure({
-      'index.hbs': `(component 'foo/bar')`,
+      app: {
+        'index.hbs': `(component 'foo/bar')`,
+      },
     });
 
     const fooLocator = new UsageLocator(new ComponentReference('app/components/foo.js'));
