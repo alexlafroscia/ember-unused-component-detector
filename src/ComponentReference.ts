@@ -1,5 +1,7 @@
 import { parse, sep as osPathSeperator } from 'path';
 
+const FILE_NAME_TO_IGNORE = new Set(['index', 'template', 'component']);
+
 const COMPONENT_PATH_REGEX = /app\/(templates\/)?components/;
 
 export class ComponentReference {
@@ -16,8 +18,8 @@ export class ComponentReference {
     // working upward to the root
     let pathParts = parsedPath.dir.split(osPathSeperator).reverse();
 
-    // Include the file name, if it is not `index`
-    if (parsedPath.name !== 'index') {
+    // Include the file name, if it is not `index`, `component` or `template`
+    if (!FILE_NAME_TO_IGNORE.has(parsedPath.name)) {
       pathParts.unshift(parsedPath.name);
     }
 

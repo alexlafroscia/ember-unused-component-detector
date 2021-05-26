@@ -16,6 +16,9 @@ test('classicStyle', () => {
   expect(new Ref('app/templates/components/foo/bar.hbs').classicStyle).toBe('foo/bar');
 
   expect(new Ref('app/components/foo-bar.hbs').classicStyle).toBe('foo-bar');
+
+  expect(new Ref('app/components/foo/component.js').classicStyle).toBe('foo');
+  expect(new Ref('app/components/foo/template.hbs').classicStyle).toBe('foo');
 });
 
 test('modernStyle', () => {
@@ -30,11 +33,16 @@ test('modernStyle', () => {
   expect(new Ref('app/components/foo/bar/index.hbs').modernStyle).toBe('Foo::Bar');
 
   expect(new Ref('app/components/foo-bar.hbs').modernStyle).toBe('FooBar');
+
+  expect(new Ref('app/components/foo/component.js').modernStyle).toBe('Foo');
+  expect(new Ref('app/components/foo/template.hbs').modernStyle).toBe('Foo');
 });
 
 test('pathIsComponent', () => {
   expect(Ref.pathIsComponent('app/components/foo.js')).toBe(true);
   expect(Ref.pathIsComponent('app/components/foo.hbs')).toBe(true);
+  expect(Ref.pathIsComponent('app/components/foo/component.hbs')).toBe(true);
+  expect(Ref.pathIsComponent('app/components/foo/template.hbs')).toBe(true);
   expect(Ref.pathIsComponent('app/templates/components/foo.hbs')).toBe(true);
   expect(Ref.pathIsComponent('app/lib/whatever.js')).toBe(false);
 });
