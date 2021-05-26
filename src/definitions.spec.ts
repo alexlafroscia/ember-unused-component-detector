@@ -39,7 +39,15 @@ test('it finds components in an app', async () => {
       },
     },
   });
-  const componentNames = await gather(findComponentDefinitions(tmpDir.dir));
+  // Finding them from the root directory
+  let componentNames = await gather(findComponentDefinitions(tmpDir.dir));
+
+  expect(componentNames.map((c) => c.classicStyle).sort()).toEqual(
+    ['foo', 'bar', 'bar/foo', 'baz', 'bop'].sort()
+  );
+
+  // Finding them from the `app` directory
+  componentNames = await gather(findComponentDefinitions(tmpDir.path('app')));
 
   expect(componentNames.map((c) => c.classicStyle).sort()).toEqual(
     ['foo', 'bar', 'bar/foo', 'baz', 'bop'].sort()

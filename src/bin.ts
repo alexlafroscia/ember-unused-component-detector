@@ -7,7 +7,7 @@ import { UsageLocator } from './UsageLocator';
 const [_nodePath, _binPath, directoryArg = './'] = process.argv;
 
 export default async function main(): Promise<void> {
-  const directoryToSearch = resolve(process.cwd(), directoryArg);
+  const directoryToSearch = resolve(process.cwd(), directoryArg, 'app');
 
   console.log(`Searching in $${directoryToSearch}`);
 
