@@ -1,6 +1,6 @@
 {
   "name": "@alexlafroscia/ember-unused-component-detector",
-  "version": "1.0.6",
+  "version": "1.0.5",
   "description": "Locate Ember components that are not actually used in your application",
   "author": "Alex LaFroscia <alex@lafroscia.com>",
   "license": "MIT",

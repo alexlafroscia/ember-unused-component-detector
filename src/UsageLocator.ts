@@ -10,6 +10,27 @@ type RipGrepOptions = Omit<BaseRipGrepOptions, 'string' | 'regex'>;
  * Rust-style Regex pattern to match either a space
  *
  * ```
+ * <Foo />
+ *     ^
+ * ```
+ *
+ * or end-of-line
+ *
+ * ```
+ * <Foo
+ *     ^
+ * />
+ * ```
+ *
+ * Note: `\b` is **not** used because it will match all word boundaries, including `:`, which for our purposes should
+ * be considered to be part of the word itself.
+ */
+const SPACE_OR_END_OF_LINE_MATCH = '(\\s|\\z)';
+
+/**
+ * Rust-style Regex pattern to match either a space
+ *
+ * ```
  * {{component 'foo'}}
  *            ^
  * ```
@@ -53,7 +74,7 @@ export class UsageLocator {
   }
 
   async hasModernComponentInvocations(packageRoot: string): Promise<boolean> {
-    const regex = `"<${this.name.modernStyle}"`;
+    const regex = `"<${this.name.modernStyle}${SPACE_OR_END_OF_LINE_MATCH}"`;
     log('Searching for %s', regex);
     const matches = await performSearch(packageRoot, regex);
 
@@ -61,7 +82,7 @@ export class UsageLocator {
   }
 
   async hasClassicComponentInvocation(packageRoot: string): Promise<boolean> {
-    const regex = `"\\{\\{${this.name.classicStyle}"`;
+    const regex = `"\\{\\{${this.name.classicStyle}(${SPACE_OR_END_OF_LINE_MATCH}|}})"`;
     log('Searching for %s', regex);
     const matches = await performSearch(packageRoot, regex);
 
