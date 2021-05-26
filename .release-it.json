@@ -1,0 +1,12 @@
+{
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  },
+  "github": {
+    "release": true,
+    "tokenRef": "RELEASE_IT_GITHUB_TOKEN"
+  }
+}
